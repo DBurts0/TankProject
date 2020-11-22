@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class TankData : MonoBehaviour
 {
+    // Variables for health
     public int maxHealth;
     public int currentHealth;
+    // Variable for determining how much damage the tank will take
     private int damageTaken;
+    // Variable to access the shell's Shell script
     private Shell shellCaller;
 
     // Start is called before the first frame update
     void Start()
     {
+        // Make the tank's current health equal to it's max
         currentHealth = maxHealth;
     }
      
@@ -27,16 +31,24 @@ public class TankData : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
+        // Check if the tank is an enemy and colliding with a player's shell
         if (col.gameObject.tag == "Player Shell" && gameObject.tag == "Enemy")
         {
+            // Access the Shell script
             shellCaller = col.gameObject.GetComponent<Shell>();
+            // Grab the damage variable
             damageTaken = shellCaller.damage;
+            // Use the shell's damage variable to determine the health loss
             TakeDamage();
         }
+        // Check if the tank is a player and colliding with an enemy's shell
         else if (col.gameObject.tag == "Enemy Shell" && gameObject.tag == "Player")
         {
+            // Access the Shell script
             shellCaller = col.gameObject.GetComponent<Shell>();
+            // Grab the damage variable
             damageTaken = shellCaller.damage;
+            // Use the shell's damage variable to determine the health loss
             TakeDamage();
         }
     }
@@ -50,6 +62,7 @@ public class TankData : MonoBehaviour
             currentHealth -= damageTaken;
         }
     }
+    // Destroy the tank this script is attached to
     public void DestroyTank()
     {
         Destroy(gameObject);

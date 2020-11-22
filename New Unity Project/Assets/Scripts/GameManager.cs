@@ -7,10 +7,10 @@ public class GameManager : MonoBehaviour
     // Ensure that only one GameManager is active at a time
     public static GameManager instance;
 
-    // Create an array to store all of the active enemies
+    // List to store all of the active enemies
     public List<GameObject> activeEnemies;
 
-    // Create variable to store the player
+    // Variable to store the player
     public GameObject player;
 
     // Destroy additional instances of the Game Manager if any
@@ -34,15 +34,19 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Check if an enemy in the list has been destroyed
         for (int i = 0; i < activeEnemies.Count; i++)
         {
             if (activeEnemies[i] == null)
             {
+                // Remove the destroyed enemy from the list
                 activeEnemies.Remove(activeEnemies[i]);
             }
         }
+        // Check if the player has been destroyed
         if (player == null)
         {
+            // Print a message saying Game Over!
             Debug.Log("Game Over!");
         }
     }

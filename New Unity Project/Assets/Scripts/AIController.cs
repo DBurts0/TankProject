@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class AIController : MonoBehaviour
 {
-    // Create a variable to access the TankMotor script
+    // Variable to access the TankMotor script
     private TankMotor motor;
-    // Create a variable to access the TankData script
+    // Variable to access the TankData script
     private TankData data;
-    // Create a variable to access the firepoint object
+    // Variable to access the firepoint object
     public GameObject firePoint;
-    // Create a variable to access the Shoot script
+    // Variable to access the Shoot script
     private Shoot fire;
+    // Variables to access the Game Manager script
     public GameObject gmholder;
     public GameManager gmCaller;
     // Start is called before the first frame update
@@ -21,7 +22,9 @@ public class AIController : MonoBehaviour
         motor = GetComponent<TankMotor>();
         // Access the Shoot script on the FirePoint object
         fire = firePoint.GetComponent<Shoot>();
+        // Access the Game Manager script
         gmCaller = gmholder.GetComponent<GameManager>();
+        // Add the enemy to the list of active enemies
         gmCaller.activeEnemies.Add(gameObject);
     }
 

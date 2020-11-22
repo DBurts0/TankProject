@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class Shoot : MonoBehaviour
 {
+    // Variable for the shell prefab
     public GameObject shell;
+    // Variable for the speed the shell will travel in
     public float shellSpeed;
-    // Create variables for a timer and wait time
+    // Variables for a timer and wait time
     public float waitTime;
     public float timer;
-    // Create a variable to determine how last shells will last
+    // Variable to determine how last shells will last
     public float lifeSpan;
     // Start is called before the first frame update
     void Start()
@@ -24,9 +26,11 @@ public class Shoot : MonoBehaviour
     }
     public void Fire()
     {
+        // Create a clone of the shell prefab
         GameObject shellClone = Instantiate(shell, transform.position, transform.rotation) as GameObject;
         // Reset the timer
         timer = waitTime;
+        // Check if the clone is not destroyed
         if (shellClone != null)
         {
             // Access the Shell clone's Rigidbody

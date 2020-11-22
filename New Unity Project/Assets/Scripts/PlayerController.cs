@@ -4,21 +4,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // Create a variable to access the TankMotor script
+    // Variable to access the TankMotor script
     private TankMotor motor;
-    // Create a variable to access the firepoint object
+    // Variable to access the firepoint object
     public GameObject firePoint;
-    // Create a variable to access the Shoot script
+    // Variable to access the Shoot script
     private Shoot fire;
 
+    // Inputs for the designers to customized
     public KeyCode rotateLeft;
-
     public KeyCode rotateRight;
-
     public KeyCode forwards;
-
     public KeyCode backwards;
-
     public KeyCode shootShell;
 
     // Start is called before the first frame update
