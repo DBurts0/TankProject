@@ -286,9 +286,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 646eb0af1b95f8346a5d9e671bd71787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackMode: 0
   firePoint: {fileID: 0}
   gmholder: {fileID: 0}
   gmCaller: {fileID: 0}
+  avoidanceTime: 0
+  visionRange: 10
+  hearingRange: 0
+  wallCheckRange: 0
 --- !u!114 &7477294748933817924
 MonoBehaviour:
   m_ObjectHideFlags: 0

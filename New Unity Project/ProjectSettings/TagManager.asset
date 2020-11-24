@@ -17,12 +17,12 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Obstacle
+  - Chase
+  - Flee
+  - Berserk
+  - DamageIncrease
+  - Healing
   - 
   - 
   - 
