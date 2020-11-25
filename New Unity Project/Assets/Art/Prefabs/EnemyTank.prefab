@@ -286,14 +286,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 646eb0af1b95f8346a5d9e671bd71787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  behavior: 0
   attackMode: 0
-  firePoint: {fileID: 0}
+  waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  currentWaypoint: 0
+  minDistance: 5
+  firePoint: {fileID: 1797180139576973107}
   gmholder: {fileID: 0}
   gmCaller: {fileID: 0}
-  avoidanceTime: 0
+  avoidanceTime: 2
   visionRange: 10
   hearingRange: 0
-  wallCheckRange: 0
+  playerDirection: {x: 0, y: 0, z: 0}
+  fleeDirection: {x: 0, y: 0, z: 0}
+  targetDirection: {x: 0, y: 0, z: 0}
+  player: {fileID: 0}
+  state: 
+  angleToPlayer: 0
+  angleToWaypoint: 0
+  FOV: 45
 --- !u!114 &7477294748933817924
 MonoBehaviour:
   m_ObjectHideFlags: 0
