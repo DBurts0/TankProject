@@ -274,8 +274,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1, z: 1.5}
+  m_Center: {x: 0, y: 0, z: 0.25}
 --- !u!143 &2420558338445480217
 CharacterController:
   m_ObjectHideFlags: 0
@@ -288,12 +288,12 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 1
-  m_Radius: 0.8
+  m_Radius: 0.55
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0.25}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &-6298729080415694663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,8 +306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 568ca37c1cf602d4e844bc9be4ae4884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
-  turnSpeed: 50
+  data: {fileID: 0}
 --- !u!114 &4781691456239672059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,6 +339,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 5
   currentHealth: 5
+  moveSpeed: 6
+  turnSpeed: 50
+  shellDamage: 3
 --- !u!1 &3435848103570696660
 GameObject:
   m_ObjectHideFlags: 0
@@ -480,6 +482,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shell: {fileID: 2155181196849356032, guid: c84f937b3e99e474f8627fdde73a5c90, type: 3}
   shellSpeed: 5
+  shellDamage: 0
   waitTime: 4
   timer: 0
   lifeSpan: 3

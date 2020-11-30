@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     // Variable to access the TankMotor script
     private TankMotor motor;
+    // Variable to access the TankData script
+    private TankData data;
     // Variable to access the firepoint object
     public GameObject firePoint;
     // Variable to access the Shoot script
@@ -23,8 +25,10 @@ public class PlayerController : MonoBehaviour
     {
         // Access the TankMotor script
         motor = GetComponent<TankMotor>();
+        data = GetComponent<TankData>();
         // Access the Shoot script on the FirePoint object
         fire = firePoint.GetComponent<Shoot>();
+        fire.shellDamage = data.shellDamage;
     }
 
     // Update is called once per frame

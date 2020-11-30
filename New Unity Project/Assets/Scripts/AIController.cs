@@ -34,10 +34,11 @@ public class AIController : MonoBehaviour
     public GameManager gmCaller;
 
     // Variables for obstical avoidance
-    private int avoidanceStage;
+    public int avoidanceStage;
     public float avoidanceTime;
     private float exitTime;
     private float originalSpeed;
+    private float originalTurnSpeed;
     private float originalTime;
 
     // Variable for the detection range of the tanks
@@ -50,6 +51,8 @@ public class AIController : MonoBehaviour
 
     // Variable for direction away from player
     public Vector3 fleeDirection;
+
+    public Vector3 vectorAway;
 
     // Variable for direction to the next waypoint
     public Vector3 targetDirection;
@@ -67,18 +70,33 @@ public class AIController : MonoBehaviour
     // Variables for the field of vision
     public float FOV;
     private float mirroredFOV;
+    
+    // variables for the Healing behavior
+    public int heal;
+
+    // Variables for the Damage Increase behavior
+    public int damageIncrease;
+
+    // Variables for the Berserk behavior
+    public float speedIncrease;
+
+    public float timer;
+    private float timerReset;
 
     // Start is called before the first frame update
     void Start()
     {
         // Access the TankMotor script
         motor = GetComponent<TankMotor>();
+        // Access the TankData script
+        data = GetComponent<TankData>();
         // Set originalSpeed equal to the designer set speed to allow changes in speed withough losing the original value
-        originalSpeed = motor.moveSpeed;
- 
+        originalSpeed = data.moveSpeed;
+        originalTurnSpeed = data.turnSpeed;
+
         // Access the Shoot script on the FirePoint object
         fire = firePoint.GetComponent<Shoot>();
-
+        fire.shellDamage = data.shellDamage;
         // Access the Game Manager script
         gmCaller = gmholder.GetComponent<GameManager>();
         // Add the enemy to the list of active enemies
@@ -91,6 +109,8 @@ public class AIController : MonoBehaviour
         mirroredFOV = 180 - FOV;
 
         state = "Patrol";
+
+        timerReset = timer;
     }
 
     // Update is called once per frame
@@ -105,24 +125,70 @@ public class AIController : MonoBehaviour
         }
         // Countdown
         fire.timer -= Time.deltaTime;
-        // Check if the count down is less than or equal to 0
-        if (fire.timer <= 0)
+        timer -= Time.deltaTime;
+        avoidanceTime -= Time.deltaTime;
+        if (behavior == Behavior.berserk)
         {
-            // Use the Fire function on the Shoot script
-            fire.Fire();
+            Berserk();
         }
-        if (CanMove(motor.moveSpeed))
+        else if (behavior == Behavior.damageIncrease)
         {
-            //if (state == "Patrol")
-            //{
+            DamageIncrease();
+        }
+        else if (behavior == Behavior.heal)
+        {
+            Healing();
+        }
+
+        if (state == "Patrol")
+        {
+                // Restore speed
+                data.moveSpeed = originalSpeed;
                 Patrol();
-            //}
+            if (CanHear(player))
+            {
+                ChangeState("Investigate");
+            }
         }
-        else
+        else if (state == "Investigate")
         {
-            motor.moveSpeed = 0;
-            avoidanceStage = 1;
-            ObstacleAvoidance(state);
+            Investigate();
+            if (CanSee(player))
+            {
+                if(attackMode == AttackMode.chase)
+                {
+                    ChangeState("Chase");
+                }
+                if (attackMode == AttackMode.flee)
+                {
+                    ChangeState("Flee");
+                }
+            }
+            else if (CanHear(player) == false)
+            {
+                ChangeState("Patrol");
+            }
+        }
+        else if (state == "Chase")
+        {
+            // Restore speed
+            data.moveSpeed = originalSpeed;
+            Chase();
+            Attack();
+            if (CanSee(player) == false)
+            {
+                ChangeState("Investigate");
+            }
+        }
+        else if (state == "Flee")
+        {
+            // Restore speed
+            data.moveSpeed = originalSpeed;
+            Flee();
+            if (CanHear(player) == false)
+            {
+                ChangeState("Investigate");
+            }
         }
     }
     
@@ -151,67 +217,105 @@ public class AIController : MonoBehaviour
 
     void ObstacleAvoidance(string originalState)
     {
-        avoidanceTime = originalTime;
-        while (avoidanceStage == 1)
+        // change states to "Avoiding"
+        ChangeState("Avoiding");
+        // backup until the obstacle is no longer within range
+        while (CanMove(data.moveSpeed) == false)
         {
-            // Countdown
-            avoidanceTime -= Time.deltaTime;
-            if (avoidanceTime > 0)
-            {
-                // Rotate until the tank can move again
-                motor.RotateRight();
-            }
-            else
-            {
-                avoidanceStage = 0;
-            } 
+            motor.Backwards();
         }
-        while (avoidanceStage == 0)
+        //rotate right until there's nothing infront of the tank
+        RaycastHit hit;
+        while (Physics.Raycast(transform.position, transform.forward, out hit, data.moveSpeed + 5))
         {
-            ChangeState(originalState);
+            motor.RotateRight();
+            avoidanceTime = originalTime;
         }
-    }
-    
-    // Behaviors
+        if (avoidanceTime > 0)
+        {
+            motor.Forwards();
+        }
 
+        // Go back to the original state
+        ChangeState(originalState);
+    }
+
+
+    // Behaviors
     void Healing()
     {
-
+        // heal the tank when the timer goes off
+        if (timer <= 0)
+        {
+            data.currentHealth += heal;
+            // Reset timer
+            timer = timerReset;
+        }
     }
 
     void DamageIncrease()
     {
-
+        // increase the tank's damage when the timer goes off
+        if (timer <= 0)
+        {
+            data.shellDamage += damageIncrease;
+            // Reset timer
+            timer = timerReset;
+        }
     }
 
     void Berserk()
     {
-
+        // give a small heal and a small boost to damage and speed when the timer goes off
+        if (timer <= 0)
+        {
+            data.shellDamage += damageIncrease;
+            data.currentHealth += heal;
+            data.moveSpeed += speedIncrease;
+            data.turnSpeed += speedIncrease;
+            originalSpeed = data.moveSpeed;
+            originalTurnSpeed = data.turnSpeed;
+            // Reset timer
+            timer = timerReset;
+        }
     }
 
     void Chase()
     {
-
+        if (player != null)
+        {
+            // Rotate and move towards the player
+            RotateTo(player.transform.position, data.turnSpeed);
+            MoveTo(player.transform.position, data.moveSpeed);
+        }
     }
 
     void Flee()
     {
-
+        // Get the vector away from the player
+        vectorAway = -1 * playerDirection;
+        vectorAway.Normalize();
+        // Extend the vector the range to the tank's hearing range
+        vectorAway *= hearingRange;
+        // Move away from the player
+        fleeDirection = vectorAway + transform.position;
+        RotateTo(fleeDirection, data.turnSpeed);
+        MoveTo(fleeDirection, data.turnSpeed);
     }
 
     void Patrol()
     {
-        //
-        motor.moveSpeed = originalSpeed;
         // Angle between the front of the tank and the current waypoint
         angleToWaypoint = Vector3.Angle(transform.forward, waypoints[currentWaypoint].position);
         // Rotate towards the current waypoint
-        RotateTo(waypoints[currentWaypoint].position, motor.turnSpeed);
+        data.moveSpeed = 0;
+        RotateTo(waypoints[currentWaypoint].position, data.turnSpeed);
         // If the tank has its waypoint in view
         if (angleToWaypoint <= FOV || angleToWaypoint <= mirroredFOV)
         {
             // Move towards the waypoint
-            MoveTo(waypoints[currentWaypoint].position, motor.moveSpeed);
+            data.moveSpeed = originalSpeed;
+            MoveTo(waypoints[currentWaypoint].position, data.moveSpeed);
         }
         // If the tank moves close enough to the waypoint, set their target to the next waypoint
         if (Vector3.Distance(waypoints[currentWaypoint].position, transform.position) <= minDistance)
@@ -224,6 +328,23 @@ public class AIController : MonoBehaviour
             currentWaypoint = 0;
         }
     }
+
+    void Investigate()
+    {
+        RotateTo(player.transform.position, data.turnSpeed);
+    }
+
+    void Attack()
+    {
+        // Check if the count down is less than or equal to 0
+        if (fire.timer <= 0)
+        {
+            // Use the Fire function on the Shoot script
+            fire.Fire();
+        }
+    }
+
+
 
     void ChangeState(string newState)
     {
@@ -263,8 +384,16 @@ public class AIController : MonoBehaviour
             // Check if the player is within the tank's field of vision
             if (angleToPlayer <= FOV || angleToPlayer <= mirroredFOV )
             {
-                // The tank can see the player
-                return true;
+                if (hitInfo.transform == chosenPlayer.transform)
+                {
+                    // The tank can see the player
+                    return true;
+                }
+                else
+                {
+                    // The tank can't see the player
+                    return false;
+                }
             }
             else
             {
@@ -293,4 +422,4 @@ public class AIController : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, target, speed * 0.5f * Time.deltaTime);
     }
 
-    }
+}

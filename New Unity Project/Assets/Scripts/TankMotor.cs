@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class TankMotor : MonoBehaviour
 {
-    // Variable for movement speed
-    public float moveSpeed;
-    // Variable for rotation speed
-    public float turnSpeed;
+    public TankData data;
     // Variable to store the character controller
     private CharacterController characterController;
     // Start is called before the first frame update
@@ -15,6 +12,7 @@ public class TankMotor : MonoBehaviour
     {
         // Access the tank's character controller
         characterController = gameObject.GetComponent<CharacterController>();
+        data = GetComponent<TankData>();
     }
 
     // Update is called once per frame
@@ -27,7 +25,7 @@ public class TankMotor : MonoBehaviour
         // Use a Vector3 variable to move the tank forwards based on the value of moveSpeed
         Vector3 direction;
         direction = transform.forward;
-        direction *= moveSpeed;
+        direction *= data.moveSpeed;
         characterController.SimpleMove(direction);
     }
     public void Backwards()
@@ -35,7 +33,7 @@ public class TankMotor : MonoBehaviour
         // Use a Vector3 variable to move the tank backwards based on the value of moveSpeed
         Vector3 direction;
         direction = transform.forward;
-        direction *= (-1 * moveSpeed);
+        direction *= (-1 * data.moveSpeed);
         characterController.SimpleMove(direction);
     }
     public void RotateLeft()
@@ -43,7 +41,7 @@ public class TankMotor : MonoBehaviour
         // Use a Vector3 to rotate the tank counter-clockwise based on the value of turnSpeed
         Vector3 rotationVector;
         rotationVector = new Vector3(0, -1, 0);
-        rotationVector *= turnSpeed * Time.deltaTime;
+        rotationVector *= data.turnSpeed * Time.deltaTime;
         transform.Rotate(rotationVector, Space.Self);
     }
     public void RotateRight()
@@ -51,7 +49,7 @@ public class TankMotor : MonoBehaviour
         // Use a Vector3 to rotate the tank clockwise based on the value of turnSpeed
         Vector3 rotationVector;
         rotationVector = new Vector3(0, 1, 0);
-        rotationVector *= turnSpeed * Time.deltaTime;
+        rotationVector *= data.turnSpeed * Time.deltaTime;
         transform.Rotate(rotationVector, Space.Self);
     }
 }

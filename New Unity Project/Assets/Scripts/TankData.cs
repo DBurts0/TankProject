@@ -7,6 +7,12 @@ public class TankData : MonoBehaviour
     // Variables for health
     public int maxHealth;
     public int currentHealth;
+    // Variable for movement speed
+    public float moveSpeed;
+    // Variable for rotation speed
+    public float turnSpeed;
+    // Variable for shell damage
+    public int shellDamage;
     // Variable for determining how much damage the tank will take
     private int damageTaken;
     // Variable to access the shell's Shell script
@@ -26,6 +32,11 @@ public class TankData : MonoBehaviour
         if (currentHealth < 1)
         {
             DestroyTank();
+        }
+        // Ensure the health of the tank never exceeds the maximum value set
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
         }
     }
 

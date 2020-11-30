@@ -8,6 +8,9 @@ public class Shoot : MonoBehaviour
     public GameObject shell;
     // Variable for the speed the shell will travel in
     public float shellSpeed;
+    // Variable for shell damage
+    public int shellDamage;
+
     // Variables for a timer and wait time
     public float waitTime;
     public float timer;
@@ -37,6 +40,8 @@ public class Shoot : MonoBehaviour
             Rigidbody rb = shellClone.GetComponent<Rigidbody>();
             // Move the shell clone forwards
             rb.velocity = transform.forward * shellSpeed;
+            // Give the shell it's damage value
+            shellClone.GetComponent<Shell>().damage = shellDamage;
             // Destroy the shell after a set amount of time
             Destroy(shellClone, lifeSpan);
         }
