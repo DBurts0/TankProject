@@ -1,0 +1,6 @@
+There are 3 behavior types, healing, damage-increase, and berserk. 
+Each behavior follows a timer that tells the AI when to activate their unique effect
+The Healing behavior heals the tank if possible, damage increase permenatly increase the damage the tank deals
+Berserk permanetly increases speed, and damage, and heals as well.
+The berserk behavior can make a tank into a formidible mini boss if you desire.
+The stat increase and healing is determined in the inspector and can be changed at anytime
