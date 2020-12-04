@@ -5,8 +5,8 @@ using UnityEngine;
 public class AIController : MonoBehaviour
 {
     // Enum for the behavior of the AI
-    public enum AttackMode {chase, flee };
-    public enum Behavior {berserk, heal, damageIncrease, normal}
+    public enum AttackMode { chase, flee };
+    public enum Behavior { berserk, heal, damageIncrease, normal }
     public Behavior behavior;
     public AttackMode attackMode;
 
@@ -19,16 +19,16 @@ public class AIController : MonoBehaviour
 
     // Variable to access the TankMotor script
     private TankMotor motor;
-    
+
     // Variable to access the TankData script
     private TankData data;
-    
+
     // Variable to access the firepoint object
     public GameObject firePoint;
-    
+
     // Variable to access the Shoot script
     private Shoot fire;
-   
+
     // Variables to access the Game Manager script
     public GameObject gmholder;
     public GameManager gmCaller;
@@ -70,7 +70,7 @@ public class AIController : MonoBehaviour
     // Variables for the field of vision
     public float FOV;
     private float mirroredFOV;
-    
+
     // variables for the Healing behavior
     public int heal;
 
@@ -111,6 +111,7 @@ public class AIController : MonoBehaviour
         state = "Patrol";
 
         timerReset = timer;
+
     }
 
     // Update is called once per frame
@@ -142,9 +143,9 @@ public class AIController : MonoBehaviour
 
         if (state == "Patrol")
         {
-                // Restore speed
-                data.moveSpeed = originalSpeed;
-                Patrol();
+            // Restore speed
+            data.moveSpeed = originalSpeed;
+            Patrol();
             if (CanHear(player))
             {
                 ChangeState("Investigate");
@@ -155,7 +156,7 @@ public class AIController : MonoBehaviour
             Investigate();
             if (CanSee(player))
             {
-                if(attackMode == AttackMode.chase)
+                if (attackMode == AttackMode.chase)
                 {
                     ChangeState("Chase");
                 }
@@ -191,12 +192,12 @@ public class AIController : MonoBehaviour
             }
         }
     }
-    
+
     bool CanMove(float speed)
     {
         RaycastHit hit;
         // Check if there is something in front of the tank
-        if(Physics.Raycast(transform.position, transform.forward, out hit, speed))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, speed))
         {
             // Check if the tank is not seeing the player
             if (!hit.collider.CompareTag("Player"))
@@ -204,7 +205,7 @@ public class AIController : MonoBehaviour
                 return false;
             }
             else
-            {              
+            {
                 return true;
             }
         }
@@ -238,6 +239,7 @@ public class AIController : MonoBehaviour
 
         // Go back to the original state
         ChangeState(originalState);
+
     }
 
 
@@ -382,7 +384,7 @@ public class AIController : MonoBehaviour
             // Get the direction to the player
             angleToPlayer = Vector3.Angle(transform.forward, playerDirection);
             // Check if the player is within the tank's field of vision
-            if (angleToPlayer <= FOV || angleToPlayer <= mirroredFOV )
+            if (angleToPlayer <= FOV || angleToPlayer <= mirroredFOV)
             {
                 if (hitInfo.transform == chosenPlayer.transform)
                 {

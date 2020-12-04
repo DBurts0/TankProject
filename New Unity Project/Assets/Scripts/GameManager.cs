@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
 
+
     }
 
     // Update is called once per frame
@@ -49,5 +50,6 @@ public class GameManager : MonoBehaviour
             // Print a message saying Game Over!
             Debug.Log("Game Over!");
         }
+
     }
 }

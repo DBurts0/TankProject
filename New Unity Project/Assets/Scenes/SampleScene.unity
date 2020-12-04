@@ -3643,11 +3643,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1842576958}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de4d70df35f52ad44bc1a5701daa866b, type: 3}
+  m_Script: {fileID: 11500000, guid: 7fb7acc1c5a278c4bb44f25c6996404b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   activeEnemies: []
-  player: {fileID: 1001920481}
+  player: {fileID: 0}
 --- !u!4 &1842576960
 Transform:
   m_ObjectHideFlags: 0

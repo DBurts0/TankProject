@@ -23,8 +23,10 @@ public class TankData : MonoBehaviour
     {
         // Make the tank's current health equal to it's max
         currentHealth = maxHealth;
+
     }
-     
+
+
     // Update is called once per frame
     void Update()
     {
@@ -62,6 +64,7 @@ public class TankData : MonoBehaviour
             // Use the shell's damage variable to determine the health loss
             TakeDamage();
         }
+
     }
 
     public void TakeDamage()

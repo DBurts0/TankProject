@@ -13,12 +13,13 @@ public class TankMotor : MonoBehaviour
         // Access the tank's character controller
         characterController = gameObject.GetComponent<CharacterController>();
         data = GetComponent<TankData>();
+
     }
 
     // Update is called once per frame
-    void Update()
+    void update()
     {
-        
+
     }
     public void Forwards()
     {
