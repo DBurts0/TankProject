@@ -10,8 +10,14 @@ public class GameManager : MonoBehaviour
     // List to store all of the active enemies
     public List<GameObject> activeEnemies;
 
+    // List for all active pickups
+    public List<GameObject> activePickupList;
+
     // Variable to store the player
     public GameObject player;
+
+    // Variable to access the MapGenerator script
+    public MapGenerator mapCaller;
 
     // Destroy additional instances of the Game Manager if any
     void Awake()
@@ -28,8 +34,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-
+        mapCaller = GetComponent<MapGenerator>();
+        mapCaller.GenerateGrid();
+        mapCaller.SpawnPlayer();
+        Debug.Log(" " + Random.Range(0, 10));
     }
 
     // Update is called once per frame

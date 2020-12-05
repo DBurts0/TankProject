@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 39599314003004166}
   - component: {fileID: 4752094044666669796}
   - component: {fileID: 8829474254326537185}
+  - component: {fileID: 3458951208065050283}
   m_Layer: 0
   m_Name: DamagePickup
   m_TagString: Untagged
@@ -93,3 +94,27 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3458951208065050283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5632808871122291657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eef3955dad699d849b7d9d3daefc9a6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  powerup:
+    healthChanger: 0
+    speedChanger: 0
+    damageChanger: 0
+    shielded: 0
+    isPermanent: 0
+    duration: 0
+    maxDuration: 10
+    data: {fileID: 0}
+  healthBoost: 0
+  speedBoost: 0
+  damageBoost: 2

@@ -10,9 +10,6 @@ public class AIController : MonoBehaviour
     public Behavior behavior;
     public AttackMode attackMode;
 
-    // List for waypoints
-    public List<Transform> waypoints;
-
     // Variable for the current waypoint the tank is heading to
     public int currentWaypoint;
     public float minDistance;
@@ -32,6 +29,7 @@ public class AIController : MonoBehaviour
     // Variables to access the Game Manager script
     public GameObject gmholder;
     public GameManager gmCaller;
+    public MapGenerator mapCaller;
 
     // Variables for obstical avoidance
     public int avoidanceStage;
@@ -99,6 +97,8 @@ public class AIController : MonoBehaviour
         fire.shellDamage = data.shellDamage;
         // Access the Game Manager script
         gmCaller = gmholder.GetComponent<GameManager>();
+        //Access the MapGenerator script
+        mapCaller = gmholder.GetComponent<MapGenerator>();
         // Add the enemy to the list of active enemies
         gmCaller.activeEnemies.Add(gameObject);
 
@@ -308,24 +308,24 @@ public class AIController : MonoBehaviour
     void Patrol()
     {
         // Angle between the front of the tank and the current waypoint
-        angleToWaypoint = Vector3.Angle(transform.forward, waypoints[currentWaypoint].position);
+        angleToWaypoint = Vector3.Angle(transform.forward, mapCaller.waypointList[currentWaypoint]);
         // Rotate towards the current waypoint
         data.moveSpeed = 0;
-        RotateTo(waypoints[currentWaypoint].position, data.turnSpeed);
+        RotateTo(mapCaller.waypointList[currentWaypoint], data.turnSpeed);
         // If the tank has its waypoint in view
         if (angleToWaypoint <= FOV || angleToWaypoint <= mirroredFOV)
         {
             // Move towards the waypoint
             data.moveSpeed = originalSpeed;
-            MoveTo(waypoints[currentWaypoint].position, data.moveSpeed);
+            MoveTo(mapCaller.waypointList[currentWaypoint], data.moveSpeed);
         }
         // If the tank moves close enough to the waypoint, set their target to the next waypoint
-        if (Vector3.Distance(waypoints[currentWaypoint].position, transform.position) <= minDistance)
+        if (Vector3.Distance(mapCaller.waypointList[currentWaypoint], transform.position) <= minDistance)
         {
             currentWaypoint++;
         }
         // If the tank reached the last checkpoint, go through the route again 
-        if (currentWaypoint == waypoints.Count)
+        if (currentWaypoint == mapCaller.waypointList.Count)
         {
             currentWaypoint = 0;
         }

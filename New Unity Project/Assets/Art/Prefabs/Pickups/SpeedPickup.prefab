@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3252345010405212230}
   - component: {fileID: 5444457779156105356}
   - component: {fileID: 2997421470331267639}
+  - component: {fileID: 1134878171790144293}
   m_Layer: 0
   m_Name: SpeedPickup
   m_TagString: Untagged
@@ -93,3 +94,27 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1134878171790144293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6986495980179741647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eef3955dad699d849b7d9d3daefc9a6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  powerup:
+    healthChanger: 0
+    speedChanger: 0
+    damageChanger: 0
+    shielded: 0
+    isPermanent: 0
+    duration: 10
+    maxDuration: 0
+    data: {fileID: 0}
+  healthBoost: 0
+  speedBoost: 5
+  damageBoost: 0

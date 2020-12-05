@@ -40,7 +40,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1797180139576973107}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5a861c42217dac4db2ae7ebd0c7a880, type: 3}
+  m_Script: {fileID: 11500000, guid: 66bd58c2ea9a07949884c97c1842101d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   shell: {fileID: 3288811406440372522, guid: dc40b7b63f9947f40ab88cb203756993, type: 3}
@@ -158,8 +158,8 @@ GameObject:
   - component: {fileID: 4730853864266307402}
   - component: {fileID: 5088962461638032784}
   - component: {fileID: 7095352764281855290}
-  - component: {fileID: 7477294748933817924}
   - component: {fileID: 3901458916231030108}
+  - component: {fileID: 2670390449043205204}
   m_Layer: 0
   m_Name: EnemyTank
   m_TagString: Enemy
@@ -252,10 +252,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4730853864266307403}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 568ca37c1cf602d4e844bc9be4ae4884, type: 3}
+  m_Script: {fileID: 11500000, guid: 2407b8a90f3898846aa8a0870b1fe819, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
+  maxHealth: 0
+  currentHealth: 0
+  moveSpeed: 0
+  turnSpeed: 0
+  shellDamage: 0
 --- !u!114 &7095352764281855290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,55 +269,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4730853864266307403}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 646eb0af1b95f8346a5d9e671bd71787, type: 3}
+  m_Script: {fileID: 11500000, guid: 9fb1c7fac415336499b2e24f350f901c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behavior: 0
-  attackMode: 0
-  waypoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  currentWaypoint: 0
-  minDistance: 1
-  firePoint: {fileID: 1797180139576973107}
-  gmholder: {fileID: 0}
-  gmCaller: {fileID: 0}
-  avoidanceStage: 0
-  avoidanceTime: 5
-  visionRange: 10
-  hearingRange: 15
-  playerDirection: {x: 0, y: 0, z: 0}
-  fleeDirection: {x: 0, y: 0, z: 0}
-  vectorAway: {x: 0, y: 0, z: 0}
-  targetDirection: {x: 0, y: 0, z: 0}
-  player: {fileID: 0}
-  state: 
-  angleToPlayer: 0
-  angleToWaypoint: 0
-  FOV: 55
-  heal: 0
-  damageIncrease: 0
-  speedIncrease: 0
-  timer: 0
---- !u!114 &7477294748933817924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4730853864266307403}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 305170bdc283c464488ffcf3937737fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 5
-  currentHealth: 0
-  moveSpeed: 5
-  turnSpeed: 45
-  shellDamage: 2
+  data: {fileID: 0}
 --- !u!143 &3901458916231030108
 CharacterController:
   m_ObjectHideFlags: 0
@@ -332,6 +291,43 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.25, z: 0}
+--- !u!114 &2670390449043205204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4730853864266307403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21f92b15067ea4944bd5a8fe580f689d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  behavior: 0
+  attackMode: 0
+  currentWaypoint: 0
+  minDistance: 0
+  firePoint: {fileID: 0}
+  gmholder: {fileID: 0}
+  gmCaller: {fileID: 0}
+  mapCaller: {fileID: 0}
+  avoidanceStage: 0
+  avoidanceTime: 0
+  visionRange: 0
+  hearingRange: 0
+  playerDirection: {x: 0, y: 0, z: 0}
+  fleeDirection: {x: 0, y: 0, z: 0}
+  vectorAway: {x: 0, y: 0, z: 0}
+  targetDirection: {x: 0, y: 0, z: 0}
+  player: {fileID: 0}
+  state: 
+  angleToPlayer: 0
+  angleToWaypoint: 0
+  FOV: 0
+  heal: 0
+  damageIncrease: 0
+  speedIncrease: 0
+  timer: 0
 --- !u!1 &4730853864530350370
 GameObject:
   m_ObjectHideFlags: 0

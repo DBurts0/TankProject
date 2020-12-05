@@ -29,9 +29,26 @@ public class Powerups
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnActivate(GameObject tank)
     {
-        
+        // Access TankData
+        data = tank.GetComponent<TankData>();
+
+        duration = maxDuration;
+        data.moveSpeed += speedChanger;
+        data.turnSpeed += speedChanger;
+        data.currentHealth += healthChanger;
+        data.shellDamage += damageChanger;
+    }
+
+    public void OnDeactivate(GameObject tank)
+    {
+        // Access TankData
+        data = tank.GetComponent<TankData>();
+
+        data.moveSpeed -= speedChanger;
+        data.turnSpeed -= speedChanger;
+        data.currentHealth -= healthChanger;
+        data.shellDamage -= damageChanger;
     }
 }
