@@ -111,6 +111,7 @@ GameObject:
   - component: {fileID: 2119494823925513407}
   - component: {fileID: 5276794731370366169}
   - component: {fileID: 6489991731152424401}
+  - component: {fileID: 56360949280536967}
   m_Layer: 0
   m_Name: RegeneratingTank
   m_TagString: Enemy
@@ -256,12 +257,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   behavior: 1
   attackMode: 1
-  waypoints: []
   currentWaypoint: 0
   minDistance: 0
   firePoint: {fileID: 7489179690186290870}
   gmholder: {fileID: 0}
   gmCaller: {fileID: 0}
+  mapCaller: {fileID: 0}
   avoidanceStage: 0
   avoidanceTime: 0
   visionRange: 15
@@ -279,6 +280,28 @@ MonoBehaviour:
   damageIncrease: 0
   speedIncrease: 0
   timer: 8
+--- !u!114 &56360949280536967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4519760700844832462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0d3c9ceb1e7579488020cb3faaeae5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  powerupList: []
+  powerup:
+    healthChanger: 0
+    speedChanger: 0
+    damageChanger: 0
+    shielded: 0
+    isPermanent: 0
+    duration: 0
+    maxDuration: 0
+    data: {fileID: 0}
 --- !u!1 &4519760701654134951
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,9 +438,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66bd58c2ea9a07949884c97c1842101d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shell: {fileID: 0}
-  shellSpeed: 0
+  shell: {fileID: 3288811406440372522, guid: dc40b7b63f9947f40ab88cb203756993, type: 3}
+  shellSpeed: 6
   shellDamage: 0
-  waitTime: 0
+  waitTime: 3
   timer: 0
-  lifeSpan: 0
+  lifeSpan: 3

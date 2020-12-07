@@ -8,6 +8,9 @@ TagManager:
   - Wall
   - Player Shell
   - Enemy Shell
+  - Health
+  - Speed
+  - Damage
   layers:
   - Default
   - TransparentFX

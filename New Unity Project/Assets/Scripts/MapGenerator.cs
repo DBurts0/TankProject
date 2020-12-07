@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-//using System;
+using System;
 using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
@@ -53,6 +53,10 @@ public class MapGenerator : MonoBehaviour
     // Variables for selecting a type of enemy to spawn
     public List<GameObject> enemytype;
 
+    public GameObject eliteTank;
+
+    public int defeatedEnemiesRequirement;
+
     private int enemyChooser;
 
     // Variables to store the pickup prefabs
@@ -85,6 +89,7 @@ public class MapGenerator : MonoBehaviour
     public float mapWidth;
     public float mapHeight;
 
+    public int maxElites;
 
     // Start is called before the first frame update
     void Start()
@@ -92,13 +97,17 @@ public class MapGenerator : MonoBehaviour
         GMCaller = GetComponent<GameManager>();
         mapWidth = (columns - 1) * roomWidth;
         mapHeight = (rows - 1) * roomHeight;
+        GenerateGrid();
+        SpawnPlayer();
     }
     // Update is called once per frame
     public void SpawnPlayer()
     {
-        randomPoint = new Vector3(Random.Range(0, mapWidth), 1, Random.Range(0, mapHeight));
+        randomPoint = new Vector3(UnityEngine.Random.Range(0, mapWidth), 2, UnityEngine.Random.Range(0, mapHeight));
         // Create a player tank at a random point within the map
         GameObject player = Instantiate(playerTank, randomPoint, Quaternion.identity) as GameObject;
+        // Allow the Game Manager to track the player
+        GMCaller.player = player;
 
         // Set the player as a child of the map generator
         player.transform.parent = this.transform;
@@ -106,30 +115,44 @@ public class MapGenerator : MonoBehaviour
 
     void ChooseEnemy()
     {
-        enemyChooser = Random.Range(0, enemytype.Count);
+        enemyChooser = UnityEngine.Random.Range(0, enemytype.Count);
     }
 
     public void SpawnEnemy()
     {
         ChooseEnemy();
-        randomPoint = new Vector3(Random.Range(0, mapWidth), 2, Random.Range(0, mapHeight));
+        randomPoint = new Vector3(UnityEngine.Random.Range(0, mapWidth), 1, UnityEngine.Random.Range(0, mapHeight));
         // Spawn an Enemy Tank
         GameObject EnemyTank = Instantiate(enemytype[enemyChooser], randomPoint, Quaternion.identity) as GameObject;
         EnemyTank.GetComponent<AIController>().gmholder = gameObject;
-
-        // Add the tank to the list of active enemies
+        // Add the enemy to the list of active enemies
         GMCaller.activeEnemies.Add(EnemyTank);
-
+        // Give the enemy tanks the ability to track the player
+        EnemyTank.GetComponent<AIController>().player = GMCaller.player; 
         // Set the tank as a child of the map generator
         EnemyTank.transform.parent = this.transform;
+    }
+
+    public void SpawnElite()
+    {
+        // Find a random point
+        randomPoint = new Vector3(UnityEngine.Random.Range(0, mapWidth), 2, UnityEngine.Random.Range(0, mapHeight));
+        // Spawn an elite enemy
+        GameObject Elite = Instantiate(eliteTank, randomPoint, Quaternion.identity) as GameObject;
+        Elite.GetComponent<AIController>().gmholder = gameObject;
+        // Give the enemy tanks the ability to track the player
+        Elite.GetComponent<AIController>().player = GMCaller.player;
+        Elite.transform.parent = this.transform;
+        // Add the Elite to the list of active elites
+        GMCaller.eliteEnemies.Add(Elite);
     }
 
     void SpawnPickups()
     {
         // Randomly Select a pickup
-        int randomPickup = Random.Range(0, pickupList.Count);
+        int randomPickup = UnityEngine.Random.Range(0, pickupList.Count);
         // Randomly select a point on the map
-        randomPoint = new Vector3(Random.Range(0, mapWidth), 1, Random.Range(0, mapHeight));
+        randomPoint = new Vector3(UnityEngine.Random.Range(0, mapWidth), 1, UnityEngine.Random.Range(0, mapHeight));
 
         // Reset the pickupTimer
         pickupTimer = timerReset;
@@ -155,14 +178,14 @@ public class MapGenerator : MonoBehaviour
     {
         // Randomly generate a room prefab by selecting it's index in the list
 
-        return gridPrefabs[Random.Range(0, gridPrefabs.Length)];
+        return gridPrefabs[UnityEngine.Random.Range(0, gridPrefabs.Length)];
     }
 
-   /* public int DateToInt(DateTime dateToUse)
+    public int DateToInt(DateTime dateToUse)
     {
         // Add the date and time
         return dateToUse.Year + dateToUse.Month + dateToUse.Day + dateToUse.Hour + dateToUse.Minute + dateToUse.Second + dateToUse.Millisecond;
-    }*/
+    }
 
     public void GenerateGrid()
     {
@@ -175,7 +198,7 @@ public class MapGenerator : MonoBehaviour
         if (MapOfTheDay == true && presetSeed == false && randomizedMap == false)
         {
             // Set the seed to the map of the day
-            //dailyMapSeed = DateToInt(DateTime.Now.Date);
+            dailyMapSeed = DateToInt(DateTime.Now.Date);
             UnityEngine.Random.InitState(dailyMapSeed);
             Debug.Log("Using map of the day");
         }
@@ -265,11 +288,20 @@ public class MapGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(presetMapSeed);
         // Check if the amount of enemies is less than the maximum amount of enemies
         if (GMCaller.activeEnemies.Count < maxEnemies)
         {
             SpawnEnemy();
+        }
+        // Check if enough enemies have beed defeated to spawn an elite
+        if (GMCaller.enemiesDefeated >= defeatedEnemiesRequirement)
+        {
+            // Check if the number of active elites is less than the maximum
+            if (GMCaller.eliteEnemies.Count < maxElites)
+            {
+                // Spawn an Elite enemy
+                SpawnElite();
+            }
         }
 
         pickupTimer -= Time.deltaTime;

@@ -99,8 +99,6 @@ public class AIController : MonoBehaviour
         gmCaller = gmholder.GetComponent<GameManager>();
         //Access the MapGenerator script
         mapCaller = gmholder.GetComponent<MapGenerator>();
-        // Add the enemy to the list of active enemies
-        gmCaller.activeEnemies.Add(gameObject);
 
         avoidanceStage = 0;
 
@@ -145,7 +143,14 @@ public class AIController : MonoBehaviour
         {
             // Restore speed
             data.moveSpeed = originalSpeed;
-            Patrol();
+            if (CanMove(data.moveSpeed))
+            {
+                Patrol();
+            }
+            else
+            {
+                ObstacleAvoidance();
+            }
             if (CanHear(player))
             {
                 ChangeState("Investigate");
@@ -174,8 +179,15 @@ public class AIController : MonoBehaviour
         {
             // Restore speed
             data.moveSpeed = originalSpeed;
-            Chase();
-            Attack();
+            if (CanMove(data.moveSpeed))
+            {
+                Chase();
+                Attack();
+            }
+            else
+            {
+                ObstacleAvoidance();
+            }
             if (CanSee(player) == false)
             {
                 ChangeState("Investigate");
@@ -185,7 +197,14 @@ public class AIController : MonoBehaviour
         {
             // Restore speed
             data.moveSpeed = originalSpeed;
-            Flee();
+            if (CanMove(data.moveSpeed))
+            {
+                Flee();
+            }
+            else
+            {
+                ObstacleAvoidance();
+            }
             if (CanHear(player) == false)
             {
                 ChangeState("Investigate");
@@ -216,10 +235,8 @@ public class AIController : MonoBehaviour
         }
     }
 
-    void ObstacleAvoidance(string originalState)
-    {
-        // change states to "Avoiding"
-        ChangeState("Avoiding");
+    void ObstacleAvoidance()
+    { 
         // backup until the obstacle is no longer within range
         while (CanMove(data.moveSpeed) == false)
         {
@@ -230,16 +247,13 @@ public class AIController : MonoBehaviour
         while (Physics.Raycast(transform.position, transform.forward, out hit, data.moveSpeed + 5))
         {
             motor.RotateRight();
-            avoidanceTime = originalTime;
         }
-        if (avoidanceTime > 0)
+        // Move forward a few meters
+        Vector3 avoidancePoint = transform.forward + new Vector3(0,0,4);
+        while (Vector3.Distance(transform.position, avoidancePoint) <= minDistance)
         {
             motor.Forwards();
         }
-
-        // Go back to the original state
-        ChangeState(originalState);
-
     }
 
 
@@ -294,6 +308,7 @@ public class AIController : MonoBehaviour
 
     void Flee()
     {
+        playerDirection = player.transform.position - transform.position;
         // Get the vector away from the player
         vectorAway = -1 * playerDirection;
         vectorAway.Normalize();
@@ -302,7 +317,12 @@ public class AIController : MonoBehaviour
         // Move away from the player
         fleeDirection = vectorAway + transform.position;
         RotateTo(fleeDirection, data.turnSpeed);
-        MoveTo(fleeDirection, data.turnSpeed);
+        // Check if the flee direction is within field of vision before fleeing
+        float angleToFlee = Vector3.Angle(transform.forward, fleeDirection);
+        if (angleToFlee <= FOV || angleToFlee <= mirroredFOV)
+        {
+            MoveTo(fleeDirection, data.moveSpeed);
+        }
     }
 
     void Patrol()

@@ -43,12 +43,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66bd58c2ea9a07949884c97c1842101d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shell: {fileID: 0}
-  shellSpeed: 0
+  shell: {fileID: 3288811406440372522, guid: dc40b7b63f9947f40ab88cb203756993, type: 3}
+  shellSpeed: 6
   shellDamage: 0
-  waitTime: 0
+  waitTime: 3
   timer: 0
-  lifeSpan: 0
+  lifeSpan: 3
 --- !u!1 &6300862369473242435
 GameObject:
   m_ObjectHideFlags: 0
@@ -65,6 +65,7 @@ GameObject:
   - component: {fileID: 8404200450344070962}
   - component: {fileID: 2374155948358866772}
   - component: {fileID: 3736113574190538332}
+  - component: {fileID: 6962220901129371978}
   m_Layer: 0
   m_Name: BerserkerTank
   m_TagString: Enemy
@@ -210,12 +211,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   behavior: 0
   attackMode: 0
-  waypoints: []
   currentWaypoint: 0
   minDistance: 1
   firePoint: {fileID: 1019691101946897723}
   gmholder: {fileID: 0}
   gmCaller: {fileID: 0}
+  mapCaller: {fileID: 0}
   avoidanceStage: 0
   avoidanceTime: 0
   visionRange: 10
@@ -233,6 +234,28 @@ MonoBehaviour:
   damageIncrease: 1
   speedIncrease: 1
   timer: 15
+--- !u!114 &6962220901129371978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6300862369473242435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0d3c9ceb1e7579488020cb3faaeae5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  powerupList: []
+  powerup:
+    healthChanger: 0
+    speedChanger: 0
+    damageChanger: 0
+    shielded: 0
+    isPermanent: 0
+    duration: 0
+    maxDuration: 0
+    data: {fileID: 0}
 --- !u!1 &6300862370213164789
 GameObject:
   m_ObjectHideFlags: 0

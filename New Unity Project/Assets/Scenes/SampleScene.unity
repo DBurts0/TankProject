@@ -247,6 +247,8 @@ MonoBehaviour:
   activePickupList: []
   player: {fileID: 0}
   mapCaller: {fileID: 0}
+  enemiesDefeated: 0
+  eliteEnemies: []
 --- !u!4 &1842576960
 Transform:
   m_ObjectHideFlags: 0
@@ -287,7 +289,7 @@ MonoBehaviour:
   dailyMapSeed: 0
   presetMapSeed: 0
   presetSeed: 0
-  randomizedMap: 1
+  randomizedMap: 0
   MapOfTheDay: 0
   randomPoint: {x: 0, y: 0, z: 0}
   playerTank: {fileID: 3435848102836025954, guid: f40c2170f46502444bdaf74ad374bb39,
@@ -298,15 +300,18 @@ MonoBehaviour:
   - {fileID: 6300862369473242435, guid: f3d848783196dd54e8ee6b65d2463bb4, type: 3}
   - {fileID: 4519760700844832462, guid: 0de3f1d5393760d41b6bc3822063aaf8, type: 3}
   - {fileID: 3891742582316354199, guid: 514d4fe052575b7499b5c2a804d57a32, type: 3}
+  eliteTank: {fileID: 2292479305460931755, guid: cf5f4ad61dbf8a44a98886fef7774a99,
+    type: 3}
+  defeatedEnemiesRequirement: 5
   HealthPickup: {fileID: 1975220813032834083, guid: 89e54d70837c882499ad220f6f3bf9bc,
     type: 3}
   SpeedPickup: {fileID: 6986495980179741647, guid: d29db956d67623d458371f63774e196a,
     type: 3}
   DamagePickup: {fileID: 5632808871122291657, guid: 6de797b47ca19924b9375e07b0434b6e,
     type: 3}
-  pickupTimer: 0
-  timerReset: 0
-  pickupLimit: 0
+  pickupTimer: 10
+  timerReset: 10
+  pickupLimit: 5
   GMCaller: {fileID: 0}
   pickupList:
   - {fileID: 6986495980179741647, guid: d29db956d67623d458371f63774e196a, type: 3}
@@ -316,3 +321,4 @@ MonoBehaviour:
   waypoint: {x: 0, y: 0, z: 0}
   mapWidth: 0
   mapHeight: 0
+  maxElites: 4

@@ -19,6 +19,12 @@ public class GameManager : MonoBehaviour
     // Variable to access the MapGenerator script
     public MapGenerator mapCaller;
 
+    // Variable keeping track of defeated enemies
+    public int enemiesDefeated;
+
+    // List tracking number of elite enemies
+    public List<GameObject> eliteEnemies;
+
     // Destroy additional instances of the Game Manager if any
     void Awake()
     {
@@ -35,9 +41,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         mapCaller = GetComponent<MapGenerator>();
-        mapCaller.GenerateGrid();
-        mapCaller.SpawnPlayer();
-        Debug.Log(" " + Random.Range(0, 10));
     }
 
     // Update is called once per frame
@@ -50,6 +53,18 @@ public class GameManager : MonoBehaviour
             {
                 // Remove the destroyed enemy from the list
                 activeEnemies.Remove(activeEnemies[i]);
+                enemiesDefeated++;
+            }
+        }
+
+        // Check if an elite has been destroyed
+        for (int i = 0; i < eliteEnemies.Count; i++)
+        {
+            if (eliteEnemies[i] == null)
+            {
+                // Remove the destroyed enemy from the list
+                eliteEnemies.Remove(eliteEnemies[i]);
+                enemiesDefeated++;
             }
         }
         // Check if the player has been destroyed
