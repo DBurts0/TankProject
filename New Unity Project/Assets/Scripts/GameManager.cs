@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
     // Variable keeping track of defeated enemies
     public int enemiesDefeated;
 
+    // Variable to make quota of defeated enemies the player must reach
+    public int enemyQuota;
+
     // List tracking number of elite enemies
     public List<GameObject> eliteEnemies;
 

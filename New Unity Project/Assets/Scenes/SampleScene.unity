@@ -248,6 +248,7 @@ MonoBehaviour:
   player: {fileID: 0}
   mapCaller: {fileID: 0}
   enemiesDefeated: 0
+  enemyQuota: 10
   eliteEnemies: []
 --- !u!4 &1842576960
 Transform:

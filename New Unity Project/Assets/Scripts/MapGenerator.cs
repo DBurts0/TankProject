@@ -94,10 +94,14 @@ public class MapGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Access the Game Manager script
         GMCaller = GetComponent<GameManager>();
+        // Set up the height and width of the map
         mapWidth = (columns - 1) * roomWidth;
         mapHeight = (rows - 1) * roomHeight;
+        // Create the map
         GenerateGrid();
+        // Spawn the player
         SpawnPlayer();
     }
     // Update is called once per frame
@@ -115,6 +119,7 @@ public class MapGenerator : MonoBehaviour
 
     void ChooseEnemy()
     {
+        // Choose a random type of enemy
         enemyChooser = UnityEngine.Random.Range(0, enemytype.Count);
     }
 
@@ -122,7 +127,7 @@ public class MapGenerator : MonoBehaviour
     {
         ChooseEnemy();
         randomPoint = new Vector3(UnityEngine.Random.Range(0, mapWidth), 1, UnityEngine.Random.Range(0, mapHeight));
-        // Spawn an Enemy Tank
+        // Spawn an enemy tank at a random point on the map
         GameObject EnemyTank = Instantiate(enemytype[enemyChooser], randomPoint, Quaternion.identity) as GameObject;
         EnemyTank.GetComponent<AIController>().gmholder = gameObject;
         // Add the enemy to the list of active enemies
@@ -291,7 +296,11 @@ public class MapGenerator : MonoBehaviour
         // Check if the amount of enemies is less than the maximum amount of enemies
         if (GMCaller.activeEnemies.Count < maxEnemies)
         {
-            SpawnEnemy();
+            // Check if the number of enemies defeated is less than the quota of defeated enemies
+            if (GMCaller.enemiesDefeated < GMCaller.enemyQuota)
+            {
+                SpawnEnemy();
+            }
         }
         // Check if enough enemies have beed defeated to spawn an elite
         if (GMCaller.enemiesDefeated >= defeatedEnemiesRequirement)
