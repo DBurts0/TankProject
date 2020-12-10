@@ -276,9 +276,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 590f418a39814e74bb4ff4c1d50b97ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxEnemies: 5
-  rows: 5
-  columns: 5
+  maxEnemies: 2
+  rows: 2
+  columns: 2
   roomWidth: 50
   roomHeight: 50
   gridPrefabs:
@@ -303,7 +303,7 @@ MonoBehaviour:
   - {fileID: 3891742582316354199, guid: 514d4fe052575b7499b5c2a804d57a32, type: 3}
   eliteTank: {fileID: 2292479305460931755, guid: cf5f4ad61dbf8a44a98886fef7774a99,
     type: 3}
-  defeatedEnemiesRequirement: 5
+  defeatedEnemiesRequirement: 2
   HealthPickup: {fileID: 1975220813032834083, guid: 89e54d70837c882499ad220f6f3bf9bc,
     type: 3}
   SpeedPickup: {fileID: 6986495980179741647, guid: d29db956d67623d458371f63774e196a,

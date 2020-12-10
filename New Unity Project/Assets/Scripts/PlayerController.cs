@@ -28,13 +28,13 @@ public class PlayerController : MonoBehaviour
         data = GetComponent<TankData>();
         // Access the Shoot script on the FirePoint object
         fire = firePoint.GetComponent<Shoot>();
-        fire.shellDamage = data.shellDamage;
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        fire.shellDamage = data.shellDamage;
         // Countdown
         fire.timer -= Time.deltaTime;
         // Check if the player is pressing the forwards key

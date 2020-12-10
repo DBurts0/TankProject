@@ -115,6 +115,8 @@ public class AIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Update the damage value changes
+        fire.shellDamage = data.shellDamage;
         // Create a Raycast infront of the tank equal to their detection range
         if (Physics.Raycast(transform.position, transform.forward, out hitInfo, visionRange))
         {
@@ -244,7 +246,7 @@ public class AIController : MonoBehaviour
         }
         //rotate right until there's nothing infront of the tank
         RaycastHit hit;
-        while (Physics.Raycast(transform.position, transform.forward, out hit, data.moveSpeed + 5))
+        while (Physics.Raycast(transform.position, transform.forward, out hit, (data.moveSpeed/2)))
         {
             motor.RotateRight();
         }
@@ -308,20 +310,23 @@ public class AIController : MonoBehaviour
 
     void Flee()
     {
-        playerDirection = player.transform.position - transform.position;
-        // Get the vector away from the player
-        vectorAway = -1 * playerDirection;
-        vectorAway.Normalize();
-        // Extend the vector the range to the tank's hearing range
-        vectorAway *= hearingRange;
-        // Move away from the player
-        fleeDirection = vectorAway + transform.position;
-        RotateTo(fleeDirection, data.turnSpeed);
-        // Check if the flee direction is within field of vision before fleeing
-        float angleToFlee = Vector3.Angle(transform.forward, fleeDirection);
-        if (angleToFlee <= FOV || angleToFlee <= mirroredFOV)
+        if (player != null)
         {
-            MoveTo(fleeDirection, data.moveSpeed);
+            playerDirection = player.transform.position - transform.position;
+            // Get the vector away from the player
+            vectorAway = -1 * playerDirection;
+            vectorAway.Normalize();
+            // Extend the vector the range to the tank's hearing range
+            vectorAway *= hearingRange;
+            // Move away from the player
+            fleeDirection = vectorAway + transform.position;
+            RotateTo(fleeDirection, data.turnSpeed);
+            // Check if the flee direction is within field of vision before fleeing
+            float angleToFlee = Vector3.Angle(transform.forward, fleeDirection);
+            if (angleToFlee <= FOV || angleToFlee <= mirroredFOV)
+            {
+                MoveTo(fleeDirection, data.moveSpeed);
+            }
         }
     }
 

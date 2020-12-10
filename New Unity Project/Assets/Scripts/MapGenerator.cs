@@ -53,10 +53,13 @@ public class MapGenerator : MonoBehaviour
     // Variables for selecting a type of enemy to spawn
     public List<GameObject> enemytype;
 
+    //Variable for Elite tank prefab
     public GameObject eliteTank;
 
+    // Variable for deciding how many enemies must be defeated until an elite tank can be spawned 
     public int defeatedEnemiesRequirement;
 
+    // Variable for randomly chossing an enemy type
     private int enemyChooser;
 
     // Variables to store the pickup prefabs
@@ -74,6 +77,7 @@ public class MapGenerator : MonoBehaviour
     // Variable for limiting how many pickups are allowed at a time
     public int pickupLimit;
 
+    // Variable for accessing the Game Manager
     public GameManager GMCaller;
 
     // List for possible pickups
@@ -89,6 +93,7 @@ public class MapGenerator : MonoBehaviour
     public float mapWidth;
     public float mapHeight;
 
+    // Variable for limiting the number of elite enemies
     public int maxElites;
 
     // Start is called before the first frame update

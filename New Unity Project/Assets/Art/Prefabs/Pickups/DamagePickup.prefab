@@ -110,7 +110,6 @@ MonoBehaviour:
     healthChanger: 0
     speedChanger: 0
     damageChanger: 2
-    shielded: 0
     isPermanent: 0
     duration: 0
     maxDuration: 10

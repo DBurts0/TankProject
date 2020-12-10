@@ -324,7 +324,7 @@ MonoBehaviour:
   currentHealth: 0
   moveSpeed: 5
   turnSpeed: 60
-  shellDamage: 2
+  shellDamage: 5
 --- !u!114 &1037385995101663712
 MonoBehaviour:
   m_ObjectHideFlags: 0

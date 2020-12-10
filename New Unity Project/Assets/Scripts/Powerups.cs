@@ -12,8 +12,6 @@ public class Powerups
 
     public int damageChanger;
 
-    public bool shielded;
-
     public bool isPermanent;
 
     // Variables for timers

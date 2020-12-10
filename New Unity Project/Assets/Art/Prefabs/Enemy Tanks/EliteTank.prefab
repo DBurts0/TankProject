@@ -207,7 +207,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 20
   currentHealth: 0
-  moveSpeed: 3
+  moveSpeed: 6
   turnSpeed: 50
   shellDamage: 5
 --- !u!114 &4323485266545563354

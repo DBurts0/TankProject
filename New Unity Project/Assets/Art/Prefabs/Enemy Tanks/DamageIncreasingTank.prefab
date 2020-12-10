@@ -372,7 +372,7 @@ MonoBehaviour:
   heal: 0
   damageIncrease: 2
   speedIncrease: 0
-  timer: 10
+  timer: 25
 --- !u!114 &3955231057454818296
 MonoBehaviour:
   m_ObjectHideFlags: 0
