@@ -127,7 +127,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4519760700844832462}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -24.9, y: 0.4, z: 44.8}
+  m_LocalPosition: {x: -24.9, y: 0.25, z: 44.8}
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_Children:
   - {fileID: 4519760701654134944}
@@ -209,6 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 8
   currentHealth: 0
+  points: 0
   moveSpeed: 4
   turnSpeed: 60
   shellDamage: 2
@@ -271,7 +272,8 @@ MonoBehaviour:
   fleeDirection: {x: 0, y: 0, z: 0}
   vectorAway: {x: 0, y: 0, z: 0}
   targetDirection: {x: 0, y: 0, z: 0}
-  player: {fileID: 0}
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   state: 
   angleToPlayer: 0
   angleToWaypoint: 0
@@ -297,7 +299,6 @@ MonoBehaviour:
     healthChanger: 0
     speedChanger: 0
     damageChanger: 0
-    shielded: 0
     isPermanent: 0
     duration: 0
     maxDuration: 0

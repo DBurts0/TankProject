@@ -55,8 +55,10 @@ public class AIController : MonoBehaviour
     // Variable for direction to the next waypoint
     public Vector3 targetDirection;
 
-    // Variable for the player
-    public GameObject player;
+    // Variables for the players
+    public GameObject player1;
+    public GameObject player2;
+    private GameObject chosenPlayer;
 
     // Variable for the state of the tank
     public string state;
@@ -153,26 +155,35 @@ public class AIController : MonoBehaviour
             {
                 ObstacleAvoidance();
             }
-            if (CanHear(player))
+            if (CanHear(player1))
             {
+                chosenPlayer = player1;
+                ChangeState("Investigate");
+            }
+            else if (CanHear(player2))
+            {
+                chosenPlayer = player2;
                 ChangeState("Investigate");
             }
         }
         else if (state == "Investigate")
         {
-            Investigate();
-            if (CanSee(player))
+            Investigate(chosenPlayer);
+            if (CanSee(chosenPlayer))
             {
                 if (attackMode == AttackMode.chase)
                 {
+                    chosenPlayer = player1;
                     ChangeState("Chase");
                 }
                 if (attackMode == AttackMode.flee)
                 {
+                    chosenPlayer = player1;
                     ChangeState("Flee");
                 }
             }
-            else if (CanHear(player) == false)
+
+            else if (CanHear(chosenPlayer) == false)
             {
                 ChangeState("Patrol");
             }
@@ -183,14 +194,14 @@ public class AIController : MonoBehaviour
             data.moveSpeed = originalSpeed;
             if (CanMove(data.moveSpeed))
             {
-                Chase();
+                Chase(chosenPlayer);
                 Attack();
             }
             else
             {
                 ObstacleAvoidance();
             }
-            if (CanSee(player) == false)
+            if (CanSee(chosenPlayer) == false)
             {
                 ChangeState("Investigate");
             }
@@ -201,13 +212,13 @@ public class AIController : MonoBehaviour
             data.moveSpeed = originalSpeed;
             if (CanMove(data.moveSpeed))
             {
-                Flee();
+                Flee(chosenPlayer);
             }
             else
             {
                 ObstacleAvoidance();
             }
-            if (CanHear(player) == false)
+            if (CanHear(chosenPlayer) == false)
             {
                 ChangeState("Investigate");
             }
@@ -298,21 +309,21 @@ public class AIController : MonoBehaviour
         }
     }
 
-    void Chase()
+    void Chase(GameObject chosenPlayer)
     {
-        if (player != null)
+        if (chosenPlayer != null)
         {
             // Rotate and move towards the player
-            RotateTo(player.transform.position, data.turnSpeed);
-            MoveTo(player.transform.position, data.moveSpeed);
+            RotateTo(chosenPlayer.transform.position, data.turnSpeed);
+            MoveTo(chosenPlayer.transform.position, data.moveSpeed);
         }
     }
 
-    void Flee()
+    void Flee(GameObject chosenPlayer)
     {
-        if (player != null)
+        if (chosenPlayer != null)
         {
-            playerDirection = player.transform.position - transform.position;
+            playerDirection = chosenPlayer.transform.position - transform.position;
             // Get the vector away from the player
             vectorAway = -1 * playerDirection;
             vectorAway.Normalize();
@@ -356,9 +367,9 @@ public class AIController : MonoBehaviour
         }
     }
 
-    void Investigate()
+    void Investigate(GameObject chosenPlayer)
     {
-        RotateTo(player.transform.position, data.turnSpeed);
+        RotateTo(chosenPlayer.transform.position, data.turnSpeed);
     }
 
     void Attack()

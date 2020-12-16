@@ -7,6 +7,9 @@ public class TankData : MonoBehaviour
     // Variables for health
     public int maxHealth;
     public int currentHealth;
+
+    public int points;
+
     // Variable for movement speed
     public float moveSpeed;
     // Variable for rotation speed
@@ -80,6 +83,11 @@ public class TankData : MonoBehaviour
     public void DestroyTank()
     {
         Destroy(gameObject);
+        // If the tank is an enemy add points
+        if (gameObject.tag == "Enemy")
+        {
+            GetComponent<AIController>().gmCaller.score += points;
+        }
     }
 
 }

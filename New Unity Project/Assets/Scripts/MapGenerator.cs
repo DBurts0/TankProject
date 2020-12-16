@@ -36,13 +36,13 @@ public class MapGenerator : MonoBehaviour
     public int presetMapSeed;
 
     // Create bool to choose if the player wants a preset seed
-    public bool presetSeed;
+    public bool presetMap;
 
     // Create bool to choose if the player wants a randomized map
-    public bool randomizedMap;
+    public bool randomMap;
 
     // Create bool to choose if the player wants a map of the day
-    public bool MapOfTheDay;
+    public bool dailyMap;
 
     // Create a variable to store a random point;
     public Vector3 randomPoint;
@@ -96,6 +96,8 @@ public class MapGenerator : MonoBehaviour
     // Variable for limiting the number of elite enemies
     public int maxElites;
 
+    public Camera playerCam;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -104,22 +106,45 @@ public class MapGenerator : MonoBehaviour
         // Set up the height and width of the map
         mapWidth = (columns - 1) * roomWidth;
         mapHeight = (rows - 1) * roomHeight;
-        // Create the map
-        GenerateGrid();
-        // Spawn the player
-        SpawnPlayer();
     }
     // Update is called once per frame
-    public void SpawnPlayer()
+    public void SpawnPlayer1()
     {
-        randomPoint = new Vector3(UnityEngine.Random.Range(0, mapWidth), 2, UnityEngine.Random.Range(0, mapHeight));
+        randomPoint = new Vector3(UnityEngine.Random.Range(0, mapWidth), 1, UnityEngine.Random.Range(0, mapHeight));
         // Create a player tank at a random point within the map
         GameObject player = Instantiate(playerTank, randomPoint, Quaternion.identity) as GameObject;
         // Allow the Game Manager to track the player
-        GMCaller.player = player;
-
+        GMCaller.player1 = player;
+        // Create a camera to look at and follow the player
+        Camera cam = Instantiate(playerCam, player.transform.position + new Vector3(0, 10, -10), Quaternion.identity);
+        cam.transform.LookAt(player.transform);
+        cam.transform.parent = player.transform;
+        if (GMCaller.multiplayer == true)
+        {
+            // Make player1 the top half of the screen
+            cam.rect = new Rect(0f, 0.5f, 1f, 0.5f);
+        }
         // Set the player as a child of the map generator
         player.transform.parent = this.transform;
+    }
+    public void SpawnPlayer2()
+    {
+        randomPoint = new Vector3(UnityEngine.Random.Range(0, mapWidth), 1, UnityEngine.Random.Range(0, mapHeight));
+        // Create a player tank at a random point within the map
+        GameObject player2 = Instantiate(playerTank, randomPoint, Quaternion.identity) as GameObject;
+        // Allow the Game Manager to track the player
+        GMCaller.player2 = player2;
+
+        // Create a camera to look at and follow the player
+        Camera cam = Instantiate(playerCam, player2.transform.position + new Vector3(0, 30, 0), Quaternion.identity);
+        cam.transform.LookAt(player2.transform);
+        cam.transform.parent = player2.transform;
+        // Make player 2 the bottom half of the screen
+        cam.rect = new Rect(0f, 0f, 1f, 0.5f);
+
+
+        // Set the player as a child of the map generator
+        player2.transform.parent = this.transform;
     }
 
     void ChooseEnemy()
@@ -137,8 +162,12 @@ public class MapGenerator : MonoBehaviour
         EnemyTank.GetComponent<AIController>().gmholder = gameObject;
         // Add the enemy to the list of active enemies
         GMCaller.activeEnemies.Add(EnemyTank);
-        // Give the enemy tanks the ability to track the player
-        EnemyTank.GetComponent<AIController>().player = GMCaller.player; 
+        // Give the enemy tanks the ability to track the players
+        EnemyTank.GetComponent<AIController>().player1 = GMCaller.player1;
+        if (GMCaller.multiplayer == true)
+        {
+            EnemyTank.GetComponent<AIController>().player2 = GMCaller.player2;
+        }
         // Set the tank as a child of the map generator
         EnemyTank.transform.parent = this.transform;
     }
@@ -150,8 +179,12 @@ public class MapGenerator : MonoBehaviour
         // Spawn an elite enemy
         GameObject Elite = Instantiate(eliteTank, randomPoint, Quaternion.identity) as GameObject;
         Elite.GetComponent<AIController>().gmholder = gameObject;
-        // Give the enemy tanks the ability to track the player
-        Elite.GetComponent<AIController>().player = GMCaller.player;
+        // Give the enemy tanks the ability to track the players
+        Elite.GetComponent<AIController>().player1 = GMCaller.player1;
+        if (GMCaller.multiplayer == true)
+        {
+            Elite.GetComponent<AIController>().player2 = GMCaller.player2;
+        }
         Elite.transform.parent = this.transform;
         // Add the Elite to the list of active elites
         GMCaller.eliteEnemies.Add(Elite);
@@ -199,13 +232,13 @@ public class MapGenerator : MonoBehaviour
 
     public void GenerateGrid()
     {
-        if (presetSeed == true && MapOfTheDay == false && randomizedMap == false)
+        if (GMCaller.mapType == 2)
         {
             // Set the preset seed
             UnityEngine.Random.InitState(presetMapSeed);
             Debug.Log("Using preset seed");
         }
-        if (MapOfTheDay == true && presetSeed == false && randomizedMap == false)
+        if (GMCaller.mapType == 3)
         {
             // Set the seed to the map of the day
             dailyMapSeed = DateToInt(DateTime.Now.Date);
