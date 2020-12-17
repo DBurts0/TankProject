@@ -7,6 +7,10 @@ public class TankMotor : MonoBehaviour
     public TankData data;
     // Variable to store the character controller
     private CharacterController characterController;
+
+    public AudioClip engine;
+    public float vol;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +32,7 @@ public class TankMotor : MonoBehaviour
         direction = transform.forward;
         direction *= data.moveSpeed;
         characterController.SimpleMove(direction);
+        AudioSource.PlayClipAtPoint(engine, transform.position, vol);
     }
     public void Backwards()
     {
@@ -36,6 +41,7 @@ public class TankMotor : MonoBehaviour
         direction = transform.forward;
         direction *= (-1 * data.moveSpeed);
         characterController.SimpleMove(direction);
+        AudioSource.PlayClipAtPoint(engine, transform.position, vol);
     }
     public void RotateLeft()
     {
@@ -44,6 +50,7 @@ public class TankMotor : MonoBehaviour
         rotationVector = new Vector3(0, -1, 0);
         rotationVector *= data.turnSpeed * Time.deltaTime;
         transform.Rotate(rotationVector, Space.Self);
+        AudioSource.PlayClipAtPoint(engine, transform.position, vol);
     }
     public void RotateRight()
     {
@@ -52,5 +59,6 @@ public class TankMotor : MonoBehaviour
         rotationVector = new Vector3(0, 1, 0);
         rotationVector *= data.turnSpeed * Time.deltaTime;
         transform.Rotate(rotationVector, Space.Self);
+        AudioSource.PlayClipAtPoint(engine, transform.position, vol);
     }
 }

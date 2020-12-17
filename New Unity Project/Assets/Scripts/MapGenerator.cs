@@ -116,7 +116,7 @@ public class MapGenerator : MonoBehaviour
         // Allow the Game Manager to track the player
         GMCaller.player1 = player;
         // Create a camera to look at and follow the player
-        Camera cam = Instantiate(playerCam, player.transform.position + new Vector3(0, 10, -10), Quaternion.identity);
+        Camera cam = Instantiate(playerCam, player.transform.position + new Vector3(0, 2, -5), Quaternion.identity);
         cam.transform.LookAt(player.transform);
         cam.transform.parent = player.transform;
         if (GMCaller.multiplayer == true)
@@ -136,7 +136,7 @@ public class MapGenerator : MonoBehaviour
         GMCaller.player2 = player2;
 
         // Create a camera to look at and follow the player
-        Camera cam = Instantiate(playerCam, player2.transform.position + new Vector3(0, 30, 0), Quaternion.identity);
+        Camera cam = Instantiate(playerCam, player2.transform.position + new Vector3(0, 2, -5), Quaternion.identity);
         cam.transform.LookAt(player2.transform);
         cam.transform.parent = player2.transform;
         // Make player 2 the bottom half of the screen
@@ -145,6 +145,20 @@ public class MapGenerator : MonoBehaviour
 
         // Set the player as a child of the map generator
         player2.transform.parent = this.transform;
+
+        // Give player 2 a different set of controls
+        PlayerController playerCon = player2.GetComponent<PlayerController>();
+
+        playerCon.forwards = KeyCode.UpArrow;
+
+        playerCon.backwards = KeyCode.DownArrow;
+
+        playerCon.rotateLeft = KeyCode.LeftArrow;
+
+        playerCon.rotateRight = KeyCode.RightArrow;
+
+        playerCon.shootShell = KeyCode.RightShift;
+
     }
 
     void ChooseEnemy()

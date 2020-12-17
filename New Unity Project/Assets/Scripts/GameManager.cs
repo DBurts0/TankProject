@@ -18,10 +18,11 @@ public class GameManager : MonoBehaviour
     public GameObject player1;
     public GameObject player2;
 
-    public int player1Health;
-    public int player2Health;
+    public Text player1HealthText;
+    public Text player2HealthText;
+    public Text player1LivesText;
+    public Text player2LivesText;
 
-    // Variables for player lives
     public int resetLives;
     public int player1Lives;
     public int player2Lives;
@@ -70,6 +71,8 @@ public class GameManager : MonoBehaviour
     public float sfxVol;
     public Text SFX;
     public Text Music;
+    public AudioClip button;
+    public float vol;
 
     // Variables for keeping score
     public int score;
@@ -111,6 +114,12 @@ public class GameManager : MonoBehaviour
         mapCaller = GetComponent<MapGenerator>();
     }
 
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+
     public void TitleScreen()
     {
         state = State.title;
@@ -121,6 +130,8 @@ public class GameManager : MonoBehaviour
         victoryCanvas.SetActive(false);
         lossCanvas.SetActive(false);
         leaderboardsCanvas.SetActive(false);
+        AudioSource.PlayClipAtPoint(button, transform.position, vol);
+
     }
 
     public void OptionScreen()
@@ -133,6 +144,7 @@ public class GameManager : MonoBehaviour
         victoryCanvas.SetActive(false);
         lossCanvas.SetActive(false);
         leaderboardsCanvas.SetActive(false);
+        AudioSource.PlayClipAtPoint(button, transform.position, vol);
     }
 
     public void HowToPlay()
@@ -145,6 +157,7 @@ public class GameManager : MonoBehaviour
         victoryCanvas.SetActive(false);
         lossCanvas.SetActive(false);
         leaderboardsCanvas.SetActive(false);
+        AudioSource.PlayClipAtPoint(button, transform.position, vol);
     }
 
     public void GameScreen()
@@ -169,8 +182,13 @@ public class GameManager : MonoBehaviour
         {
             mapCaller.SpawnPlayer2();
             player2Lives = resetLives;
+            player2.GetComponent<TankMotor>().vol = sfxVol;
         }
-
+        for (int i = 0; i < activeEnemies.Count; i++)
+        {
+            activeEnemies[i].GetComponent<TankMotor>().vol = sfxVol;
+        }
+        player1.GetComponent<TankMotor>().vol = sfxVol;
     }
 
     public void VictoryScreen()
@@ -221,6 +239,7 @@ public class GameManager : MonoBehaviour
     // Increase the volume of the music
     public void MusicUp()
     {
+        AudioSource.PlayClipAtPoint(button, transform.position, vol);
         musicVol += 0.1f;
 
         // Ensure the volume cannot exceed maximum value
@@ -237,6 +256,7 @@ public class GameManager : MonoBehaviour
     // Decrease the volume of the music
     public void MusicDown()
     {
+        AudioSource.PlayClipAtPoint(button, transform.position, vol);
         musicVol -= 0.1f;
 
         // Ensure the volume cannot exceed maximum value
@@ -253,6 +273,7 @@ public class GameManager : MonoBehaviour
     // Increase the SFX volume
     public void SFXUp()
     {
+        AudioSource.PlayClipAtPoint(button, transform.position, vol);
         sfxVol += 0.1f;
 
         // Ensure the volume cannot exceed maximum value
@@ -260,7 +281,8 @@ public class GameManager : MonoBehaviour
         {
             sfxVol = 1.0f;
         }
-
+        // Update the volume of the button
+        vol = sfxVol;
         // Save the change in volume
         PlayerPrefs.SetFloat("SFX", sfxVol);
         PlayerPrefs.Save();
@@ -269,6 +291,7 @@ public class GameManager : MonoBehaviour
     // Decrease the SFX volume
     public void SFXDown()
     {
+        AudioSource.PlayClipAtPoint(button, transform.position, vol);
         sfxVol -= 0.1f;
 
         // Ensure the volume cannot exceed maximum value
@@ -276,7 +299,8 @@ public class GameManager : MonoBehaviour
         {
             sfxVol = 0;
         }
-
+        // Update the volume of the button
+        vol = sfxVol;
         // Save the change in volume
         PlayerPrefs.SetFloat("SFX", sfxVol);
         PlayerPrefs.Save();
@@ -284,41 +308,50 @@ public class GameManager : MonoBehaviour
 
     public void LoadVolPrefs()
     {
-        PlayerPrefs.GetFloat("SFX");
-        PlayerPrefs.GetFloat("Music");
+        sfxVol = PlayerPrefs.GetFloat("SFX");
+        musicVol = PlayerPrefs.GetFloat("Music");
+
     }
 
     // Enable split-screen multiplayer
     public void Multiplayer()
     {
+        AudioSource.PlayClipAtPoint(button, transform.position, vol);
         multiplayer = true;
     }
 
     // Disable split-screen multiplayer
     public void SinglePlayer()
     {
+        AudioSource.PlayClipAtPoint(button, transform.position, vol);
         multiplayer = false;
     }
 
     // Have the Map Generator create a randomized map
     public void RandomMap()
     {
+        AudioSource.PlayClipAtPoint(button, transform.position, vol);
         mapType = 1;
     }
     // Have the Map Generator create a map with a preset seed
     public void PresetMap()
     {
-        mapType = 2; 
+        AudioSource.PlayClipAtPoint(button, transform.position, vol);
+        mapType = 2;
+        // Convert the player's input from a string to an int
+        mapCaller.presetMapSeed = int.Parse(inputText.GetComponent<Text>().text);
     }
     // Have the Map Generator create the map of the day
     public void DailyMap()
     {
+        AudioSource.PlayClipAtPoint(button, transform.position, vol);
         mapType = 3;
     }
 
     // Add the player's score to the leaderboards if they are high enough
     public void SaveScore()
     {
+        AudioSource.PlayClipAtPoint(button, transform.position, vol);
         // Replace the scores
         if (score >= firstPlace)
         {
@@ -371,14 +404,25 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Have the music clip volume change with the music variable
+        GetComponent<AudioSource>().volume = musicVol;
+
         if (state != State.game)
         {
             // deactivate the map generator while out of game mode
             GetComponent<MapGenerator>().enabled = false;
-        }
-        if (state == State.title)
-        {
-            
+            enemiesDefeated = 0;
+            if (multiplayer != true)
+            {
+                player2HealthText.enabled = false;
+                player2LivesText.enabled = false;
+            }
+            // Remove all child objects if any
+            foreach (Transform child in transform)
+            {
+                Destroy(child.gameObject);
+            }
+
         }
         else if (state == State.options)
         {
@@ -388,7 +432,26 @@ public class GameManager : MonoBehaviour
         }
         else if (state == State.game)
         {
-            
+            // Return to ttile if the escape key is pressed
+            if (Input.GetKey(KeyCode.Escape))
+            {
+                TitleScreen();
+            }
+
+            // Keep track of the players' health and lives
+            if (player1 != null)
+            {
+                player1HealthText.text = "Player 1 Health: " + player1.GetComponent<TankData>().currentHealth + " /" + player1.GetComponent<TankData>().maxHealth;
+                player1LivesText.text = "Player 1 lives: " + player1Lives + "/" + resetLives;
+            }
+            if (multiplayer == true && player2 != null)
+            {
+                player2HealthText.enabled = true;
+                player2LivesText.enabled = true;
+                player2HealthText.text = "Player 2 health: " + player2.GetComponent<TankData>().currentHealth + "/" + player2.GetComponent<TankData>().maxHealth;
+                player2LivesText.text = "Player2 lives: " + player2Lives + "/" + resetLives;
+            }
+
             // Check if an enemy in the list has been destroyed
             for (int i = 0; i < activeEnemies.Count; i++)
             {
@@ -429,7 +492,7 @@ public class GameManager : MonoBehaviour
                 if (player2Lives > 0)
                 {
                     player2Lives -= 1;
-                    mapCaller.SpawnPlayer1();
+                    mapCaller.SpawnPlayer2();
                 }
             }
             if (player1 == null && player2 == null)
@@ -440,6 +503,15 @@ public class GameManager : MonoBehaviour
                 }
             }
 
+        }
+        // Update the leaderboards if a change is made
+        else if (state == State.leaderboards)
+        {
+            firstPlaceText.text  = "" + PlayerPrefs.GetInt("FirstPlace");
+            secondPlaceText.text = "" + PlayerPrefs.GetInt("SecondPlace");
+            thirdPlaceText.text = "" + PlayerPrefs.GetInt("ThirdPlace");
+            fourthPlaceText.text = "" + PlayerPrefs.GetInt("FourthPlace");
+            fifthPlaceText.text = "" + PlayerPrefs.GetInt("FifthPlace");
         }
     }
 }

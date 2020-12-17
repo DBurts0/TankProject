@@ -16,6 +16,10 @@ public class Shoot : MonoBehaviour
     public float timer;
     // Variable to determine how last shells will last
     public float lifeSpan;
+
+    public AudioClip fireClip;
+    public float vol;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +27,8 @@ public class Shoot : MonoBehaviour
     }
     public void Fire()
     {
+        AudioSource.PlayClipAtPoint(fireClip, transform.position, vol);
+
         // Create a clone of the shell prefab
         GameObject shellClone = Instantiate(shell, transform.position, transform.rotation) as GameObject;
         // Reset the timer

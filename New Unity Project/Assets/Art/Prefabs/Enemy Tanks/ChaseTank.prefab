@@ -209,6 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 10
   currentHealth: 0
+  points: 100
   moveSpeed: 5
   turnSpeed: 70
   shellDamage: 2
@@ -225,6 +226,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 3585822969232298587}
+  engine: {fileID: 8300000, guid: 316224186e8ae6543990a05f4dc13981, type: 3}
+  vol: 0
 --- !u!143 &4717523556723280535
 CharacterController:
   m_ObjectHideFlags: 0
@@ -271,7 +274,8 @@ MonoBehaviour:
   fleeDirection: {x: 0, y: 0, z: 0}
   vectorAway: {x: 0, y: 0, z: 0}
   targetDirection: {x: 0, y: 0, z: 0}
-  player: {fileID: 0}
+  player1: {fileID: 0}
+  player2: {fileID: 0}
   state: 
   angleToPlayer: 0
   angleToWaypoint: 0
@@ -297,7 +301,6 @@ MonoBehaviour:
     healthChanger: 0
     speedChanger: 0
     damageChanger: 0
-    shielded: 0
     isPermanent: 0
     duration: 0
     maxDuration: 0
@@ -444,3 +447,5 @@ MonoBehaviour:
   waitTime: 3
   timer: 0
   lifeSpan: 3
+  fireClip: {fileID: 8300000, guid: 8b8b193dd11d0f140b03e7fd362e521a, type: 3}
+  vol: 0

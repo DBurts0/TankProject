@@ -102,7 +102,7 @@ public class AIController : MonoBehaviour
         //Access the MapGenerator script
         mapCaller = gmholder.GetComponent<MapGenerator>();
 
-        avoidanceStage = 0;
+        avoidanceStage = 1;
 
         originalTime = avoidanceTime;
 
@@ -166,7 +166,7 @@ public class AIController : MonoBehaviour
                 ChangeState("Investigate");
             }
         }
-        else if (state == "Investigate")
+        else if (state == "Investigate" && chosenPlayer != null)
         {
             Investigate(chosenPlayer);
             if (CanSee(chosenPlayer))
@@ -188,7 +188,7 @@ public class AIController : MonoBehaviour
                 ChangeState("Patrol");
             }
         }
-        else if (state == "Chase")
+        else if (state == "Chase" && chosenPlayer != null)
         {
             // Restore speed
             data.moveSpeed = originalSpeed;
@@ -206,7 +206,7 @@ public class AIController : MonoBehaviour
                 ChangeState("Investigate");
             }
         }
-        else if (state == "Flee")
+        else if (state == "Flee" && chosenPlayer != null)
         {
             // Restore speed
             data.moveSpeed = originalSpeed;
@@ -251,21 +251,33 @@ public class AIController : MonoBehaviour
     void ObstacleAvoidance()
     { 
         // backup until the obstacle is no longer within range
-        while (CanMove(data.moveSpeed) == false)
+        if (CanMove(data.moveSpeed) == false && avoidanceStage == 1)
         {
             motor.Backwards();
         }
+        else if (CanMove(data.moveSpeed) == true && avoidanceStage == 1)
+        {
+            avoidanceStage = 2;
+        }
         //rotate right until there's nothing infront of the tank
         RaycastHit hit;
-        while (Physics.Raycast(transform.position, transform.forward, out hit, (data.moveSpeed/2)))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, (data.moveSpeed/2)) && avoidanceStage == 2)
         {
             motor.RotateRight();
         }
+        else if(avoidanceStage == 2 && CanMove(data.moveSpeed))
+        {
+            avoidanceStage = 3;
+        }
         // Move forward a few meters
         Vector3 avoidancePoint = transform.forward + new Vector3(0,0,4);
-        while (Vector3.Distance(transform.position, avoidancePoint) <= minDistance)
+        if (Vector3.Distance(transform.position, avoidancePoint) > minDistance && avoidanceStage == 3)
         {
             motor.Forwards();
+        }
+        else if (Vector3.Distance(transform.position, avoidancePoint) <= minDistance && avoidanceStage == 3)
+        {
+            avoidanceStage = 1;
         }
     }
 

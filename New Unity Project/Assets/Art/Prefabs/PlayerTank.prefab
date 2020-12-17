@@ -224,6 +224,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 0}
+  engine: {fileID: 8300000, guid: 5c224246aabdf2147b24b920563d9f85, type: 3}
+  vol: 0
 --- !u!114 &4781691456239672059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,7 +261,7 @@ MonoBehaviour:
   rotateRight: 100
   forwards: 119
   backwards: 115
-  shootShell: 32
+  shootShell: 304
 --- !u!114 &3009288990266617941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,7 +423,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shell: {fileID: 2155181196849356032, guid: c84f937b3e99e474f8627fdde73a5c90, type: 3}
   shellSpeed: 6
-  shellDamage: 0
+  shellDamage: 5
   waitTime: 3
   timer: 0
   lifeSpan: 3
+  fireClip: {fileID: 8300000, guid: 8b8b193dd11d0f140b03e7fd362e521a, type: 3}
+  vol: 0
