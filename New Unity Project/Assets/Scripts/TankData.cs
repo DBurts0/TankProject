@@ -20,6 +20,8 @@ public class TankData : MonoBehaviour
     private int damageTaken;
     // Variable to access the shell's Shell script
     private Shell shellCaller;
+    // Variable for fire rate
+    public float fireRate;
 
     // Start is called before the first frame update
     void Start()

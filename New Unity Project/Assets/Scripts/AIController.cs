@@ -112,6 +112,8 @@ public class AIController : MonoBehaviour
 
         timerReset = timer;
 
+        fire.waitTime = data.fireRate;
+
     }
 
     // Update is called once per frame

@@ -41,21 +41,16 @@ public class GameManager : MonoBehaviour
 
     // Variables for the canvases
     public GameObject titleCanvas;
-
     public GameObject gameCanvas;
-
     public GameObject optionsCanvas;
-
     public GameObject howToPlayCanvas;
-
     public GameObject victoryCanvas;
-
     public GameObject lossCanvas;
-
     public GameObject leaderboardsCanvas;
+    public GameObject adjustmentCanvas;
 
     // Variables for the states of the Game Manager
-    public enum State {title, options, intro, game, victory, loss, leaderboards };
+    public enum State {title, options, intro, game, victory, loss, leaderboards, adjustment};
 
     public State state;
 
@@ -94,6 +89,18 @@ public class GameManager : MonoBehaviour
 
     public int mapType;
 
+    // Variables for inputs
+    public GameObject inputHealth;
+    public GameObject inputLives;
+    public GameObject inputFireRate;
+    public GameObject inputMaxEnemies;
+    public GameObject inputTurnSpeed;
+    public GameObject inputMoveSpeed;
+    private int healthChange;
+    private float turnSpeedChange;
+    private float moveSpeedChange;
+    private float timerChange;
+
     // Destroy additional instances of the Game Manager if any
     void Awake()
     {
@@ -112,6 +119,10 @@ public class GameManager : MonoBehaviour
         TitleScreen();
         LoadVolPrefs();
         mapCaller = GetComponent<MapGenerator>();
+        healthChange = 10;
+        timerChange = 4;
+        moveSpeedChange = 5;
+        turnSpeedChange = 60;
     }
 
     public void Quit()
@@ -130,6 +141,7 @@ public class GameManager : MonoBehaviour
         victoryCanvas.SetActive(false);
         lossCanvas.SetActive(false);
         leaderboardsCanvas.SetActive(false);
+        adjustmentCanvas.SetActive(false);
         AudioSource.PlayClipAtPoint(button, transform.position, vol);
 
     }
@@ -144,6 +156,7 @@ public class GameManager : MonoBehaviour
         victoryCanvas.SetActive(false);
         lossCanvas.SetActive(false);
         leaderboardsCanvas.SetActive(false);
+        adjustmentCanvas.SetActive(false);
         AudioSource.PlayClipAtPoint(button, transform.position, vol);
     }
 
@@ -157,6 +170,7 @@ public class GameManager : MonoBehaviour
         victoryCanvas.SetActive(false);
         lossCanvas.SetActive(false);
         leaderboardsCanvas.SetActive(false);
+        adjustmentCanvas.SetActive(false);
         AudioSource.PlayClipAtPoint(button, transform.position, vol);
     }
 
@@ -170,6 +184,7 @@ public class GameManager : MonoBehaviour
         victoryCanvas.SetActive(false);
         lossCanvas.SetActive(false);
         leaderboardsCanvas.SetActive(false);
+        adjustmentCanvas.SetActive(false);
         // Activate the map generator script
         GetComponent<MapGenerator>().enabled = true;
 
@@ -178,17 +193,31 @@ public class GameManager : MonoBehaviour
         // Spawn the player
         mapCaller.SpawnPlayer1();
         player1Lives = resetLives;
+        // Apply changes from adjustment screen
+        player1.GetComponent<TankMotor>().vol = sfxVol;
+        player1.GetComponent<TankData>().moveSpeed = moveSpeedChange;
+        player1.GetComponent<TankData>().turnSpeed = turnSpeedChange;
+        player1.GetComponent<TankData>().fireRate = timerChange;
+        player1.GetComponent<TankData>().maxHealth = healthChange;
         if (multiplayer == true)
         {
+            // Apply changes from adjustment screen
             mapCaller.SpawnPlayer2();
             player2Lives = resetLives;
             player2.GetComponent<TankMotor>().vol = sfxVol;
+            player2.GetComponent<TankData>().moveSpeed = moveSpeedChange;
+            player2.GetComponent<TankData>().turnSpeed = turnSpeedChange;
+            player2.GetComponent<TankData>().fireRate = timerChange;
+            player2.GetComponent<TankData>().maxHealth = healthChange;
         }
         for (int i = 0; i < activeEnemies.Count; i++)
         {
             activeEnemies[i].GetComponent<TankMotor>().vol = sfxVol;
+            // Apply changes from adjustment screen
+            activeEnemies[i].GetComponent<TankData>().moveSpeed = moveSpeedChange;
+            activeEnemies[i].GetComponent<TankData>().turnSpeed = turnSpeedChange;
+            activeEnemies[i].GetComponent<TankData>().fireRate = timerChange;
         }
-        player1.GetComponent<TankMotor>().vol = sfxVol;
     }
 
     public void VictoryScreen()
@@ -201,6 +230,7 @@ public class GameManager : MonoBehaviour
         victoryCanvas.SetActive(true);
         lossCanvas.SetActive(false);
         leaderboardsCanvas.SetActive(false);
+        adjustmentCanvas.SetActive(false);
     }
 
     public void LossScreen()
@@ -214,6 +244,7 @@ public class GameManager : MonoBehaviour
         victoryCanvas.SetActive(false);
         lossCanvas.SetActive(true);
         leaderboardsCanvas.SetActive(false);
+        adjustmentCanvas.SetActive(false);
     }
 
     public void Leaderboards()
@@ -227,6 +258,7 @@ public class GameManager : MonoBehaviour
         victoryCanvas.SetActive(false);
         lossCanvas.SetActive(false);
         leaderboardsCanvas.SetActive(true);
+        adjustmentCanvas.SetActive(false);
 
         // Load all of the saved scores
         firstPlace = PlayerPrefs.GetInt("FirstPlace");
@@ -234,6 +266,19 @@ public class GameManager : MonoBehaviour
         thirdPlace = PlayerPrefs.GetInt("ThirdPlace");
         fourthPlace = PlayerPrefs.GetInt("FourthPlace");
         fifthPlace = PlayerPrefs.GetInt("FifthPlace");
+    }
+
+    public void AdjustmentCanvas()
+    {
+        state = State.adjustment;
+        titleCanvas.SetActive(false);
+        optionsCanvas.SetActive(false);
+        howToPlayCanvas.SetActive(false);
+        gameCanvas.SetActive(false);
+        victoryCanvas.SetActive(false);
+        lossCanvas.SetActive(false);
+        leaderboardsCanvas.SetActive(false);
+        adjustmentCanvas.SetActive(true);
     }
 
     // Increase the volume of the music
@@ -339,13 +384,24 @@ public class GameManager : MonoBehaviour
         AudioSource.PlayClipAtPoint(button, transform.position, vol);
         mapType = 2;
         // Convert the player's input from a string to an int
-        mapCaller.presetMapSeed = int.Parse(inputText.GetComponent<Text>().text);
+        int.TryParse(inputText.GetComponent<Text>().text, out mapCaller.presetMapSeed);
     }
     // Have the Map Generator create the map of the day
     public void DailyMap()
     {
         AudioSource.PlayClipAtPoint(button, transform.position, vol);
         mapType = 3;
+    }
+
+    public void ApplyPrefs()
+    {
+        // Convert player inputs into ints and floats
+        int.TryParse(inputHealth.GetComponent<Text>().text, out healthChange);
+        int.TryParse(inputLives.GetComponent<Text>().text, out resetLives);
+        float.TryParse(inputFireRate.GetComponent<Text>().text, out timerChange);
+        int.TryParse(inputMaxEnemies.GetComponent<Text>().text, out enemyQuota);
+        float.TryParse(inputTurnSpeed.GetComponent<Text>().text, out turnSpeedChange);
+        float.TryParse(inputMoveSpeed.GetComponent<Text>().text, out moveSpeedChange);
     }
 
     // Add the player's score to the leaderboards if they are high enough

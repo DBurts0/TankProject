@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
         data = GetComponent<TankData>();
         // Access the Shoot script on the FirePoint object
         fire = firePoint.GetComponent<Shoot>();
-
+        fire.waitTime = data.fireRate;
     }
 
     // Update is called once per frame
